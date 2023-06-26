@@ -31,11 +31,12 @@ router.post ('/createuser',[
         password: req.body.password,
         });
         console.log("user created")
+
         
         
         // .then((user)=>res.json(user))
         // .catch(errors => res.json({ errors:'email is already existed, please try again'}));
-    res.json({ "User": "user" });
+    res.json(user);
 } catch (error) {
     console.log(error.message);
     res.status(500).send("some error occurred")
