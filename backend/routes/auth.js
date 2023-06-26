@@ -1,54 +1,88 @@
-const express= require('express');
-const User= require('../models/User');
+const express = require('express');
+const User = require('../models/User');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
-const JWT_SECRET="something$secretishere"
-const router=express.Router();
+const JWT_SECRET = "something$secretishere"
+const router = express.Router();
 
-router.post ('/createuser',[
-    body('name').isLength({min:3}),
-    
+router.post('/createuser', [
+    body('name').isLength({ min: 3 }),
+
     body('email').isEmail(),
-    body('password').isLength({min:8})
-],async (req,res) => {
+    body('password').isLength({ min: 8 })
+], async (req, res) => {
     //in case of error, send bad request and errors
-    const result= validationResult(req);
+    const result = validationResult(req);
     if (!result.isEmpty()) {
-       return res.status(400).json({ errors: result.array() });
-      }
-      try {
-        
-      
-      let user = await User.findOne({ email: req.body.email});
-      if(user)
-      {
-        console.log("email already exists")
-        return res.status(400).json({ error: "user already exists with this email" });
-      }
-      const salt=  await bcrypt.genSalt(10);
-      let secPass= await bcrypt.hash( req.body.password, salt );
-     user = await User.create  ({
-        name:req.body.name,
-        email: req.body.email,
-        password: secPass,
+        return res.status(400).json({ errors: result.array() });
+    }
+    try {
+
+
+        let user = await User.findOne({ email: req.body.email });
+        if (user) {
+            console.log("email already exists")
+            return res.status(400).json({ error: "user already exists with this email" });
+        }
+        const salt = await bcrypt.genSalt(10);
+        let secPass = await bcrypt.hash(req.body.password, salt);
+        user = await User.create({
+            name: req.body.name,
+            email: req.body.email,
+            password: secPass,
         });
-        const data ={
+        const data = {
             id: user.id
         }
         const authToken = jwt.sign(data, JWT_SECRET);
 
-        
-        
+
+
         // .then((user)=>res.json(user))
         // .catch(errors => res.json({ errors:'email is already existed, please try again'}));
-    res.json({authToken});
-} catch (error) {
-    console.log(error.message);
-    res.status(500).send("some error occurred")
-        
-}
-      
-   
+        res.json({ authToken });
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("internal server error");
+
+    }
+
+
+})
+
+router.post('/login', [
+    body('email', 'enter a valid email address please').isEmail(),
+    body('password', 'password can not be blank').exists()
+], async (req, res) => {
+    //in case of error, send bad request and errors
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        return res.status(400).json({ errors: result.array() });
+    }
+    const {email, password}=req.body;
+    try {
+
+
+        let user = await User.findOne({email});
+        if (!user) {
+           
+            return res.status(400).json({ error: "login with coorect credential" });
+        }
+        const passwordCompare=await bcrypt.compare(password, user.password);
+        if (!passwordCompare) {
+            return res.status(400).json({ error: "login with coorect credential" });
+        }
+        const data = {
+            id: user.id
+        }
+        const authToken = jwt.sign(data, JWT_SECRET);
+        res.json({ authToken });
+
+    } catch (error){
+        console.log(error.message);
+        res.status(500).send("internal server error")
+
+    }
 })
 module.exports = router;
