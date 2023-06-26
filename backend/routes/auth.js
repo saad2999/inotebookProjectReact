@@ -2,9 +2,13 @@ const express = require('express');
 const User = require('../models/User');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const JWT_SECRET = "something$secretishere"
 const router = express.Router();
+const fetchUser=require('../Middleware/fetchUser')
+
+
+//ROUTE 1: Create a User using: POST "/api/auth/createuser". No login required
 
 router.post('/createuser', [
     body('name').isLength({ min: 3 }),
@@ -33,8 +37,10 @@ router.post('/createuser', [
             password: secPass,
         });
         const data = {
-            id: user.id
-        }
+            user: {
+              id: user.id
+            }
+          }
         const authToken = jwt.sign(data, JWT_SECRET);
 
 
@@ -50,7 +56,7 @@ router.post('/createuser', [
 
 
 })
-
+//ROUTE 2: verify  and login a User using: POST "/api/auth/login". No login required
 router.post('/login', [
     body('email', 'enter a valid email address please').isEmail(),
     body('password', 'password can not be blank').exists()
@@ -74,7 +80,9 @@ router.post('/login', [
             return res.status(400).json({ error: "login with coorect credential" });
         }
         const data = {
-            id: user.id
+            user:{
+                id:user.id
+            }
         }
         const authToken = jwt.sign(data, JWT_SECRET);
         res.json({ authToken });
@@ -85,4 +93,19 @@ router.post('/login', [
 
     }
 })
+//ROUTE 3: get  a User detail using: POST "/api/auth/getuser".  login required
+router.post('/getuser', fetchUser,  async (req, res) => {
+
+try {
+    let userId=req.user.id;
+    console.log(userId);
+    const user = await User.findOne({_id:userId}).select("-password");
+    console.log(user)
+    res.send(user);
+} catch (error) {
+    console.log(error.message);
+        res.status(500).send("internal server error")
+}
+});
+
 module.exports = router;
