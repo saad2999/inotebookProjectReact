@@ -11,6 +11,7 @@ function App() {
     <NoteState>
      <Router>
       <Navbar/>
+      <div className="container">
       <Routes>
        
       <Route exect path="/" element={ <Home/>} />
@@ -18,7 +19,8 @@ function App() {
 
       </Routes>
 
-      <h1>my react app</h1>
+      
+      </div>
 
       </Router>
       </NoteState>
