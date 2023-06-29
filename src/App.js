@@ -15,7 +15,9 @@ function App() {
       <Route exect path="/about" element={ <About/>} />
 
       </Routes>
+
       <h1>my react app</h1>
+      
       </Router>
     </>
   );
