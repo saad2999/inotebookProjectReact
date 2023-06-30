@@ -2,100 +2,24 @@ import React, { useState } from "react";
 import NoteContext from "./noteContext";
 
 const NoteState=(props)=>{
+    const host ="http://localhost:5000"
+    const Intialnotes=[]
+    const getallNotes= async() =>{
+      
+    const response = await fetch(`${host}/api/notes/getallnotes`,{
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5OWQyZDU0NGY2NjY3YTIwZjE0MjAwIn0sImlhdCI6MTY4NzgwMjU4MX0.4tpAT_zhGrIOTxGI1MTSGBJDzH2gCuTe3H5_szqLBmA"
+      },
+      
+    })
+    const json = await response.json()
+    console.log(json)
+    setNotes(json)
     
-    const Intialnotes=[
-        {
-          "_id": "649b18e34c9a068003092950e",
-          "user": "649b1851c9a0680030929508",
-          "title": "my note22",
-          "description": "please do your work on time22",
-          "tag": "General",
-          "Date": "2023-06-27T17:14:12.760Z",
-          "__v": 0
-        },
-        {
-          "_id": "649d5161cae6c67fbf310cec6",
-          "user": "649b1851c9a0680030929508",
-          "title": "my note223",
-          "description": "please do your work on time22",
-          "tag": "General",
-          "Date": "2023-06-29T09:39:56.363Z",
-          "__v": 0
-        },
-        {
-          "_id": "649b138e4c9a068003092950e",
-          "user": "649b1851c9a0680030929508",
-          "title": "my note22",
-          "description": "please do your work on time22",
-          "tag": "General",
-          "Date": "2023-06-27T17:14:12.760Z",
-          "__v": 0
-        },
-        {
-          "_id": "649d516cae6c67fbf310cec60",
-          "user": "649b1851c9a0680030929508",
-          "title": "my note223",
-          "description": "please do your work on time22",
-          "tag": "General",
-          "Date": "2023-06-29T09:39:56.363Z",
-          "__v": 0
-        },
-        {
-          "_id": "649b18e4c9a068003092950e1",
-          "user": "649b1851c9a0680030929508",
-          "title": "my note22",
-          "description": "please do your work on time22",
-          "tag": "General",
-          "Date": "2023-06-27T17:14:12.760Z",
-          "__v": 0
-        },
-        {
-          "_id": "649d516cae6c67fbf310cec62",
-          "user": "649b1851c9a0680030929508",
-          "title": "my note223",
-          "description": "please do your work on time22",
-          "tag": "General",
-          "Date": "2023-06-29T09:39:56.363Z",
-          "__v": 0
-        },
-        {
-          "_id": "649b18e4c9a068003092950e7",
-          "user": "649b1851c9a0680030929508",
-          "title": "my note22",
-          "description": "please do your work on time22",
-          "tag": "General",
-          "Date": "2023-06-27T17:14:12.760Z",
-          "__v": 0
-        },
-        {
-          "_id": "649d516cae6c67fbf310cec655",
-          "user": "649b1851c9a0680030929508",
-          "title": "my note223",
-          "description": "please do your work on time22",
-          "tag": "General",
-          "Date": "2023-06-29T09:39:56.363Z",
-          "__v": 0
-        },
-        {
-          "_id": "649b18e4c9a068003092950e44",
-          "user": "649b1851c9a0680030929508",
-          "title": "my note22",
-          "description": "please do your work on time22",
-          "tag": "General",
-          "Date": "2023-06-27T17:14:12.760Z",
-          "__v": 0
-        },
-        {
-          "_id": "649d516cae6c67fbf310cec6112",
-          "user": "649b1851c9a0680030929508",
-          "title": "my note223",
-          "description": "please do your work on time22",
-          "tag": "General",
-          "Date": "2023-06-29T09:39:56.363Z",
-          "__v": 0
-        },
-    ]
-    const addNote = (title,description,tag) => {
+    }
+    const addNote = async (title,description,tag) => {
       const note= {
         "_id": "649daa516cae6c67fbf310cec6112",
         "user": "649b1851c9a0680030929508",
@@ -105,10 +29,39 @@ const NoteState=(props)=>{
         "Date": "2023-06-29T09:39:56.363Z",
         "__v": 0
       }
+      const response = await fetch(`${host}/api/notes/addnote`,{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5OWQyZDU0NGY2NjY3YTIwZjE0MjAwIn0sImlhdCI6MTY4NzgwMjU4MX0.4tpAT_zhGrIOTxGI1MTSGBJDzH2gCuTe3H5_szqLBmA"
+        },
+        body: JSON.stringify({ title, description, tag})
+      })
+      const json = response.json()
       setNotes(notes.concat(note))
       console.log(note) 
     }
-    const editNote = () => {
+    const editNote =  async (id,title,description,tag) => {
+      const response = await fetch(`${host}/api/notes/updatenote/${id}`,{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5OWQyZDU0NGY2NjY3YTIwZjE0MjAwIn0sImlhdCI6MTY4NzgwMjU4MX0.4tpAT_zhGrIOTxGI1MTSGBJDzH2gCuTe3H5_szqLBmA"
+        },
+        body: JSON.stringify({ title, description, tag})
+      })
+      const json = response.json()
+      for (let index = 0; index < notes.length; index++) {
+        const element = notes[index];
+        if (element._id === id) {
+          element.title=title;
+          element.description=description;
+          element.tag=tag;
+          
+          
+        }
+        
+      }
 
     }
     const deleteNote = (id) => {
@@ -120,7 +73,7 @@ const NoteState=(props)=>{
     const [notes,setNotes]=useState(Intialnotes)
     
     return(
-        <NoteContext.Provider value={{notes,addNote,deleteNote,editNote}}>
+        <NoteContext.Provider value={{notes,addNote,deleteNote,editNote, getallNotes}}>
         {props.children}        
         </NoteContext.Provider>
     )
