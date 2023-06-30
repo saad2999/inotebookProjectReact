@@ -23,11 +23,11 @@ const AddNote = () => {
             <input type="text" className="form-control" id="title"name="title" aria-describedby="emailHelp"onChange={onChange}/>
           </div>
           <div className="mb-3">
-            <label htmlFor="desc" className="form-label"> description</label>
+            <label htmlFor="description" className="form-label"> description</label>
             <input type="text" className="form-control" id="description" name="description" onChange={onChange} />
           </div>
 
-          <button type="submit" className="btn btn-primary" onClick={onClickHandler}> Submit </button>
+          <button type="submit" className="btn btn-primary" onClick={onClickHandler}> Add Note </button>
         </form>
       </div>
     </div>

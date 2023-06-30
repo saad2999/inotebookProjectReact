@@ -111,7 +111,10 @@ const NoteState=(props)=>{
     const editNote = () => {
 
     }
-    const deleteNote = () => {
+    const deleteNote = (id) => {
+      console.log("deleting note with "+id)
+      const newNotes=notes.filter((note) => {return note._id!==id})
+      setNotes(newNotes)
 
     }
     const [notes,setNotes]=useState(Intialnotes)
