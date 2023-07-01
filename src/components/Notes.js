@@ -47,11 +47,11 @@ const onChange=(e) =>{
       <form>
           <div className="mb-3">
             <label htmlFor="Etitle" className="form-label"> title </label>
-            <input type="text" className="form-control" id="etitle"name="etitle" aria-describedby="emailHelp"onChange={onChange}value={note.etitle}/>
+            <input type="text" className="form-control" id="etitle"name="etitle" aria-describedby="emailHelp"onChange={onChange}value={note.etitle} minLength={5} required/>
           </div>
           <div className="mb-3">
             <label htmlFor="edescription" className="form-label"> description</label>
-            <input type="text" className="form-control" id="edescription" name="edescription" onChange={onChange} value={note.edescription} />
+            <input type="text" className="form-control" id="edescription" name="edescription" onChange={onChange} value={note.edescription } minLength={5} required />
           </div>
           <div className="mb-3">
             <label htmlFor="etag" className="form-label"> tag</label>
@@ -63,7 +63,7 @@ const onChange=(e) =>{
       </div>
       <div className="modal-footer">
         <button ref={refClose} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button onClick={onClickHandler} type="button" className="btn btn-primary"> Update Note</button>
+        <button disabled={note.edescription.length<5||note.etitle.length <5} onClick={onClickHandler} type="button" className="btn btn-primary"> Update Note</button>
       </div>
     </div>
   </div>
@@ -72,7 +72,9 @@ const onChange=(e) =>{
     <AddNote/>
     <h1>your  Notes</h1>
     <div className="row my-3">
-    
+      <div className="container">
+        {notes.length===0&&"No Notes to display"}
+      </div>
     
     
       {notes.map((note) => {
