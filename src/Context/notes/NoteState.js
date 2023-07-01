@@ -43,7 +43,7 @@ const NoteState=(props)=>{
     }
     const editNote =  async (id,title,description,tag) => {
       const response = await fetch(`${host}/api/notes/updatenote/${id}`,{
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5OWQyZDU0NGY2NjY3YTIwZjE0MjAwIn0sImlhdCI6MTY4NzgwMjU4MX0.4tpAT_zhGrIOTxGI1MTSGBJDzH2gCuTe3H5_szqLBmA"
@@ -51,17 +51,20 @@ const NoteState=(props)=>{
         body: JSON.stringify({ title, description, tag})
       })
       const json = response.json()
-      for (let index = 0; index < notes.length; index++) {
-        const element = notes[index];
+      const newnotes=JSON.parse(JSON.stringify(notes))
+      for (let index = 0; index < newnotes.length; index++) {
+        const element = newnotes[index];
         if (element._id === id) {
-          element.title=title;
-          element.description=description;
-          element.tag=tag;
+          newnotes[index].title=title;
+          newnotes[index].description=description;
+          newnotes[index].tag=tag;
+          break;
           
           
         }
         
       }
+      setNotes(newnotes)
 
     }
     const deleteNote = async (id) => {

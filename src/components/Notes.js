@@ -3,23 +3,27 @@ import NoteContext from "../Context/notes/noteContext";
 import NoteItem from "./Noteitem";
 import AddNote from "./AddNote";
 
+
 function Notes() {
   const noteContext = useContext(NoteContext);
-  const { notes,getallNotes } = noteContext;
+  const { notes,getallNotes,editNote } = noteContext;
   useEffect(() => {
     getallNotes()
+    // eslint-disable-next-line
   },[]);
-  const [note ,setNote]=useState({etitle:"",edescription:"",etag:"default"})
+  const [note ,setNote]=useState({id:"", etitle:"",edescription:"",etag:"default"})
    const updatenNote=(currentnote)=>{
     ref.current.click()
-    setNote({etitle:currentnote.title,edescription:currentnote.description,etag:currentnote.tag})
+    setNote({id:currentnote._id,etitle:currentnote.title,edescription:currentnote.description,etag:currentnote.tag})
 
    }
    const ref=useRef(null)
+   const refClose=useRef(null)
 
    let onClickHandler=(e) => {
     e.preventDefault()
-    console.log("updating note",note)
+    editNote(note.id,note.etitle,note.edescription)
+    refClose.current.click()
     
 }
 const onChange=(e) =>{
@@ -58,7 +62,7 @@ const onChange=(e) =>{
         </form>
       </div>
       <div className="modal-footer">
-        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button ref={refClose} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button onClick={onClickHandler} type="button" className="btn btn-primary"> Update Note</button>
       </div>
     </div>
