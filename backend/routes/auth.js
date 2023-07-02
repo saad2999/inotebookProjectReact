@@ -60,7 +60,9 @@ router.post('/createuser', [
 router.post('/login', [
     body('email', 'enter a valid email address please').isEmail(),
     body('password', 'password can not be blank').exists()
+    
 ], async (req, res) => {
+    let success=false
     //in case of error, send bad request and errors
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -73,19 +75,20 @@ router.post('/login', [
         let user = await User.findOne({email});
         if (!user) {
            
-            return res.status(400).json({ error: "login with coorect credential" });
+            return res.status(400).json({ success:success,error: "login with coorect credential" });
         }
         const passwordCompare=await bcrypt.compare(password, user.password);
         if (!passwordCompare) {
-            return res.status(400).json({ error: "login with coorect credential" });
+            return res.status(400).json({ success:success, error: "login with coorect credential" });
         }
         const data = {
             user:{
                 id:user.id
             }
         }
+        success=true
         const authToken = jwt.sign(data, JWT_SECRET);
-        res.json({ authToken });
+        res.json({ success:success, authToken:authToken });
 
     } catch (error){
         console.log(error.message);
@@ -103,7 +106,7 @@ try {
     console.log(user)
     res.send(user);
 } catch (error) {
-    console.log(error.message);
+    
         res.status(500).send("internal server error")
 }
 });
