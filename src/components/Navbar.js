@@ -23,8 +23,8 @@ function Navbar() {
     
       </ul>
       <form className="d-flex" role="search">
-      <Link class="btn btn-primary mx-2" to="/Login" role="button">Log in</Link>
-      <Link class="btn btn-primary mx-2" to="Signup" role="button">Sign up</Link>
+      <Link className="btn btn-primary mx-2" to="/Login" role="button">Log in</Link>
+      <Link className="btn btn-primary mx-2" to="Signup" role="button">Sign up</Link>
 
       </form>
     </div>
