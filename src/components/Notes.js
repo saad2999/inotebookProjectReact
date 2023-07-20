@@ -4,7 +4,7 @@ import NoteItem from "./Noteitem";
 import AddNote from "./AddNote";
 
 
-function Notes() {
+function Notes(props) {
   const noteContext = useContext(NoteContext);
   const { notes,getallNotes,editNote } = noteContext;
   useEffect(() => {
@@ -15,6 +15,7 @@ function Notes() {
    const updatenNote=(currentnote)=>{
     ref.current.click()
     setNote({id:currentnote._id,etitle:currentnote.title,edescription:currentnote.description,etag:currentnote.tag})
+   
 
    }
    const ref=useRef(null)
@@ -23,7 +24,10 @@ function Notes() {
    let onClickHandler=(e) => {
     e.preventDefault()
     editNote(note.id,note.etitle,note.edescription)
+    
     refClose.current.click()
+    props.showAlert("updated successfully","success")
+    
     
 }
 const onChange=(e) =>{
@@ -69,7 +73,7 @@ const onChange=(e) =>{
   </div>
 </div>
 
-    <AddNote/>
+    <AddNote showAlert={props.showAlert}/>
     <h1>your  Notes</h1>
     <div className="row my-3">
       <div className="container">
@@ -78,7 +82,7 @@ const onChange=(e) =>{
     
     
       {notes.map((note) => {
-        return <NoteItem updatenNote={updatenNote} key={note._id} note={note}/>
+        return <NoteItem showAlert={props.showAlert} updatenNote={updatenNote} key={note._id} note={note}/>
       })}
     </div>
     </>

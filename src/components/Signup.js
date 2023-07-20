@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import {useNavigate} from 'react-router-dom';
 
 
-const Signup = () => {
+const Signup = (props) => {
   const [credentials ,setCredential]=useState({name:"",email:"",password:"",cpassword:""})
   let navigate = useNavigate();
 
@@ -25,10 +25,12 @@ const Signup = () => {
           //redirect
           localStorage.setItem("authToken",json.authToken)
           navigate("/")
+          props.showAlert("acccount created successfully","success")
 
         }
         else{
-          alert("Login failed")
+          props.showAlert("Signup  failed","danger")
+          
         }
     }
     const onChange=(e) =>{
@@ -57,7 +59,7 @@ const Signup = () => {
     <input type="password" className="form-control" onChange={onChange} name='cpassword' id="cpassword"/>
   </div>
   
-  <button type="submit" className="btn btn-primary">Submit</button>
+  <button type="submit" className="btn btn-primary">Sign Up</button>
 </form>
     </div>
   )
