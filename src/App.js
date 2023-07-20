@@ -14,12 +14,13 @@ function App() {
     <NoteState>
      <Router>
       <Navbar/>
-      <Alert message="saad is good"/>
+      {/* <Alert message="saad is good"/> */}
       <div className="container">
       <Routes>
        
       <Route exect path="/" element={ <Home/>} />
-      <Route exect path="/Login" element={ <Login/>} />
+    
+      <Route exect path="/Login" element={ <Login />} />
       <Route exect path="/Signup" element={ <Signup/>} />
       <Route exect path="/about" element={ <About/>} />
 
