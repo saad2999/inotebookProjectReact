@@ -23,7 +23,7 @@ const Signup = (props) => {
         if(json.success)
         {
           //redirect
-          localStorage.setItem("authToken",json.authToken)
+          localStorage.setItem("token",json.authToken)
           navigate("/")
           props.showAlert("acccount created successfully","success")
 
@@ -37,7 +37,8 @@ const Signup = (props) => {
       setCredential({...credentials,[e.target.name]:e.target.value})
   }
   return (
-    <div>
+    <div className='my-2'>
+      <h2>create a account to use inotebook</h2>
       <form onSubmit={SubmitHandler}>
   <div className="my-3">
     <label htmlFor="email" className="form-label">Email address</label>
